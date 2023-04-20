@@ -11,7 +11,6 @@ class Comment
     public string $author;
     public string $frenchCreationDate;
     public string $comment;
-    public string $id;
 }
 
 class CommentRepository
@@ -31,7 +30,7 @@ class CommentRepository
             $comment->author = $row['author'];
             $comment->frenchCreationDate = $row['french_creation_date'];
             $comment->comment = $row['comment'];
-            $comment->id = $row['id'];
+
             $comments[] = $comment;
         }
 
@@ -44,16 +43,6 @@ class CommentRepository
             'INSERT INTO comments(post_id, author, comment, comment_date) VALUES(?, ?, ?, NOW())'
         );
         $affectedLines = $statement->execute([$post, $author, $comment]);
-
-        return ($affectedLines > 0);
-    }
-
-    public function modifyComment(string $comment_id, string $modifiedComment): bool 
-    {
-        $statement = $this->connection->getConnection()->prepare(
-            'UPDATE comments SET comment= ?, comment_date=NOW() WHERE id= ?'
-        );
-        $affectedLines = $statement->execute([$modifiedComment,$comment_id]);
 
         return ($affectedLines > 0);
     }
